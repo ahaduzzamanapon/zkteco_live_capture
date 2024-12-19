@@ -122,6 +122,18 @@ class ZktecoWrapper:
             
             # Print the attendance data
             print(f"[{current_time}] Attendance captured for member_id: {member_id}")
+            
+            # attendance_url = os.environ.get('BACKEND_URL')
+            # if attendance_url:
+            attendance_url = 'http://gym_admin_auto.test/attendance/auto'
+            payload = {'member_id': member_id, 'timestamp': current_time}
+            response = requests.get(attendance_url, params=payload)
+            # Log and print the response from the server
+            if response.status_code == 200:
+                logger.info(f"Attendance data sent successfully for member_id {member_id}")
+                print(f"Server Response: {response.json()}")
+            else:
+                logger.warning(f"Failed to send attendance data for member_id {member_id}. Status Code: {response.status_code}")
         except Exception as e:
             logger.error(f"Error in send_attendance_request: {str(e)}")
 
